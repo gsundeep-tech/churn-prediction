@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+/notebooks/mlruns/*
+/notebooks/catboost_info/*
+/notebooks/logs.log
