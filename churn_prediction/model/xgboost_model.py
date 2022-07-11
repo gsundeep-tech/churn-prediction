@@ -124,7 +124,7 @@ class XGBoostModelTrainer(AbstractTrainerModel):
         ax = plot_importance(model)
         fig = ax.get_figure()
         fig_path = os.path.join(self.save_path, f'{model_key}_feature_importance.png')
-        fig.savefig(fig_path)
+        fig.savefig(fig_path, bbox_inches="tight", dpi=100)
         plt.close(fig)
 
     def plot(self, model, model_key):
