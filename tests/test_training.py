@@ -14,10 +14,8 @@ class TestTraining:
 
     def test_training(self):
         with tempfile.TemporaryDirectory() as save_dir:
-            train_model(training_data_features_path=os.path.join(
-                resources_path, 'train_features_sample.csv'),
-                        training_data_targets_path=os.path.join(
-                            resources_path, 'train_salaries_sample.csv'),
+            train_model(training_data_path=os.path.join(resources_path, 'train_data_sample.csv'),
+                        training_metadata_path=None,
                         model_save_path=save_dir)
             model_path = os.path.join(save_dir, 'model.pkl')
             assert os.path.isfile(model_path) is True
