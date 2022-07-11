@@ -1,5 +1,5 @@
 import os
-from jmespath import search
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_curve, precision_recall_curve, auc
 from xgboost import XGBClassifier, plot_importance
@@ -61,6 +61,7 @@ class XGBoostModelTrainer(AbstractTrainerModel):
         # convert to f score
         fscore = (2 * precision * recall) / (precision + recall)
         # locate the index of the largest f score
+        fscore = np.nan_to_num(fscore, nan=0)
         ix = argmax(fscore)
         print('Best Threshold=%f, F-Score=%.3f' % (thresholds[ix], fscore[ix]))
         # plot the roc curve for the model
@@ -82,34 +83,33 @@ class XGBoostModelTrainer(AbstractTrainerModel):
     def _train_model(self, X_train, X_valid, y_train, y_valid):
         pos_weight_ratio = self._calculate_pos_weight_ratio(y_train)
 
-        # parameters = {
-        #     'min_child_weight': [1, 5, 10],
-        #     'gamma': [0.5, 1, 1.5, 2],
-        #     'subsample': [0.6, 0.8, 1.0],
-        #     'colsample_bytree': [0.6, 0.8, 1.0],
-        #     'max_depth': [3, 4, 5]
-        # }
-
         parameters = {
-            'min_child_weight': [1, 5, 10],
-            #'gamma': [0.5, 1, 1.5],
-            #'subsample': [0.6, 0.8, 1.0],
-            #'colsample_bytree': [0.6, 0.8, 1.0],
-            'learning_rate': [0.01, 0.1, 0.5],
-            'subsample': [0.2, 0.5, 0.9],
-            'colsample_bytree': [0.2, 0.5, 0.9],
-            'colsample_bynode': [0.2, 0.5, 0.9],
-
+            'min_child_weight': [1, 5],
+            'gamma': [0.5, 1, 1.5],
+            'subsample': [0.6, 0.8, 1.0],
+            'colsample_bytree': [0.6, 0.8, 1.0],
+            'learning_rate': [0.1, 0.2, 0.3],
         }
+
+        # parameters = {
+        #     'min_child_weight': [1, 5],
+        #     #'gamma': [0.5, 1, 1.5],
+        #     #'subsample': [0.6, 0.8, 1.0],
+        #     #'colsample_bytree': [0.6, 0.8, 1.0],
+        #     # 'learning_rate': [0.01, 0.1, 0.5],
+        #     'learning_rate': [0.1, 0.2, 0.3],
+        #     'subsample': [0.5, 0.9],
+        #     'colsample_bytree': [0.6, 0.8, 1.0],
+        # }
 
         clf = XGBClassifier(scale_pos_weight=pos_weight_ratio,
                             objective='binary:logistic',
                             early_stopping_rounds=5,
                             n_estimators=1000,
-                            eval_metric=["error", "logloss"], max_depth=4)
+                            eval_metric=["error", "logloss"], max_depth=5)
 
         search = GridSearchCV(estimator=clf, param_grid=parameters,
-                              scoring='f1', n_jobs=10, cv=3, verbose=2)
+                              scoring='roc_auc', n_jobs=10, cv=3, verbose=2)
         # scoring='recall' , 
         # search = RandomizedSearchCV(estimator=clf, param_distributions=parameters,
         #                             scoring='roc_auc', n_jobs=10, cv=3, verbose=2)
