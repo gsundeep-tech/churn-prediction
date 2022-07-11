@@ -1,7 +1,7 @@
 import os
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_curve, precision_recall_curve, auc
+from sklearn.metrics import roc_curve, precision_recall_curve
 from xgboost import XGBClassifier, plot_importance
 import matplotlib.pyplot as plt
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
@@ -47,7 +47,6 @@ class XGBoostModelTrainer(AbstractTrainerModel):
         plt.scatter(fpr[ix], tpr[ix], marker='o', color='black', label='Best')
         # axis labels
         plt.xlabel('False Positive Rate\n\n threshold: {:.2f}  gmeans: {:.2f}'.format(threshold[ix], gmeans[ix]))
-        plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive Rate')
         plt.legend()
         # show the plot
