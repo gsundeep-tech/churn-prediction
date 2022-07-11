@@ -35,7 +35,7 @@
                 "--test_data_path",
                 "./data/test.csv",
                 "--model_path",
-                "./executions/11072022101004/model.pkl"
+                "./executions/11072022152615/model.pkl"
             ]
         }
     ]

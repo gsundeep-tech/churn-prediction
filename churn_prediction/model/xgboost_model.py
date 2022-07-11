@@ -46,12 +46,13 @@ class XGBoostModelTrainer(AbstractTrainerModel):
         plt.plot(fpr, tpr, label='XGboost')
         plt.scatter(fpr[ix], tpr[ix], marker='o', color='black', label='Best')
         # axis labels
+        plt.xlabel('False Positive Rate\n\n threshold: {:.2f}  gmeans: {:.2f}'.format(threshold[ix], gmeans[ix]))
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive Rate')
         plt.legend()
         # show the plot
         path = os.path.join(self.save_path, f'{model_key}_roc_auc_curve.png')
-        plt.savefig(path)
+        plt.savefig(path, bbox_inches="tight", dpi=100)
         plt.clf()
         plt.close()
         return threshold[ix]
@@ -70,12 +71,12 @@ class XGBoostModelTrainer(AbstractTrainerModel):
         plt.plot(recall, precision, label='XGBoost')
         plt.scatter(recall[ix], precision[ix], marker='o', color='black', label='Best')
         # axis labels
-        plt.xlabel('Recall')
+        plt.xlabel('Recall\n\n threshold: {:.2f}  F1-Score: {:.2f}'.format(thresholds[ix], fscore[ix]))
         plt.ylabel('Precision')
         plt.legend()
         # show the plot
         path = os.path.join(self.save_path, f'{model_key}_precision_recall_curve.png')
-        plt.savefig(path)
+        plt.savefig(path, bbox_inches="tight", dpi=100)
         plt.clf()
         plt.close()
         return thresholds[ix]
