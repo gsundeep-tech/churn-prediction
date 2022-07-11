@@ -5,16 +5,13 @@ from churn_prediction.data.ingestor import DataIngestor
 from churn_prediction.utils.file_utils import generate_save_path
 
 
-def train_model(training_data_path, training_metadata_path,
-                model_save_path):
+def train_model(training_data_path, training_metadata_path, model_save_path):
 
-    ingestor = DataIngestor(data_features_path=training_data_path,
-                            data_targets_path=training_metadata_path)
-    data_features, data_targets = ingestor.load_data()
+    ingestor = DataIngestor(data_path=training_data_path,
+                            metadata_path=training_metadata_path)
+    data = ingestor.load_data()
 
-    pipeline = TrainingPipeline(data_features=data_features,
-                                data_targets=data_targets,
-                                model_save_path=model_save_path)
+    pipeline = TrainingPipeline(data=data, model_save_path=model_save_path)
     pipeline.train()
 
 
@@ -41,8 +38,8 @@ def main():
     if not model_save_path:
         model_save_path = generate_save_path()
 
-    train_model(training_data_features_path=training_data_path,
-                training_data_targets_path=training_metadata_path,
+    train_model(training_data_path=training_data_path,
+                training_metadata_path=training_metadata_path,
                 model_save_path=model_save_path)
 
 

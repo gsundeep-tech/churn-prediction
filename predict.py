@@ -1,13 +1,13 @@
 import argparse
 
-from salary_prediction.prediction_pipeline import PredictionPipeline
-from salary_prediction.data.ingestor import DataIngestor
-from salary_prediction.utils.file_utils import generate_save_path
+from churn_prediction.prediction_pipeline import PredictionPipeline
+from churn_prediction.data.ingestor import DataIngestor
+from churn_prediction.utils.file_utils import generate_save_path
 
 
 def predict_data(test_data_path, model_path, save_path):
-    ingestor = DataIngestor(data_features_path=test_data_path)
-    data, _ = ingestor.load_data()
+    ingestor = DataIngestor(data_path=test_data_path)
+    data = ingestor.load_data()
 
     predictor = PredictionPipeline(data=data,
                                    model_path=model_path,

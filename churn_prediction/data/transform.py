@@ -43,5 +43,5 @@ class HighCardinalityTransformer(AbstractDataTransformer):
              SimpleImputer(missing_values='NONE',
                            strategy="constant",
                            fill_value='OTHER')),
-            ("encoder", OrdinalEncoder()),
+            ("encoder", OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=-1)),
         ])
